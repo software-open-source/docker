@@ -1,28 +1,23 @@
 version: '3.9'
-
 services:
   keycloak:
     image: quay.io/keycloak/keycloak:latest
-    restart: always
-    command: ['start-dev']
     environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
-      - DB_VENDOR=postgres
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=postgres
-      - DB_DATABASE=kc-production
-      - KEYCLOAK_HOSTNAME=http://richard.com.vn:8010
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres/kc-prod
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
     ports:
       - 8010:8080
+    command:
+      - start-dev
     networks:
       - keycloak
+    restart: always
 
 networks:
   keycloak:
-    name: postgres_postgres_networks
-
-volumes:
-  keycloak_data:
+    name: postgres_postgres
+    external: true
