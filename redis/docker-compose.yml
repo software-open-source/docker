@@ -13,7 +13,8 @@ services:
     volumes:  
       - ./redis-data:/data  
     networks:  
-      - redis-network  
+      - redis-network
+    restart: always
 
 volumes:  
   redis-data:  
