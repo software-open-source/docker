@@ -1,0 +1,15 @@
+version: "3.9"  
+
+services:  
+  admin-dashboard:  
+    build:  
+      context: .              # Build từ Dockerfile tại thư mục hiện tại  
+      dockerfile: Dockerfile  # Đảm bảo sử dụng đúng Dockerfile  
+    ports:  
+      - "80:3000"             # Map cổng 3000 trong container sang cổng 80 trên host  
+    volumes:  
+      - .:/app                # Đồng bộ mã nguồn từ host vào container  
+      - /app/node_modules     # Tránh ghi đè node_modules  
+    stdin_open: true          # Giữ terminal mở để phát triển  
+    tty: true  
+    restart: unless-stopped   # Tự động restart nếu container bị crash
