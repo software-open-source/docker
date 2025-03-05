@@ -1,24 +1,33 @@
-# Sử dụng Node.js 20-alpine làm base image  
-FROM node:20-alpine  
+# Sử dụng hình ảnh node:18-alpine thay cho phiên bản mới nhất vì nó ổn định  
+FROM node:18-alpine  
 
-# Set biến môi trường để ReactJS không sinh ra các cảnh báo  
+# Thiết lập biến môi trường để giảm lỗi khi chạy ứng dụng  
 ENV NODE_ENV=development  
 ENV CHOKIDAR_USEPOLLING=true  
+
+# Cài đặt các công cụ build cần thiết để hỗ trợ esbuild và các công cụ Node.js  
+RUN apk add --no-cache build-base python3  
 
 # Thiết lập thư mục làm việc bên trong container  
 WORKDIR /app  
 
-# Sao chép package.json và package-lock.json vào container  
+# Sao chép các file cấu hình của dự án (package.json và package-lock.json hoặc yarn.lock) vào container  
 COPY package*.json ./  
 
-# Cài đặt các dependencies  
+# Cài đặt dependencies  
 RUN npm install  
 
-# Sao chép toàn bộ mã nguồn vào container  
+# Nếu bạn sử dụng yarn, thay thế bằng:  
+# RUN npm install -g yarn && yarn install  
+
+# Sao chép toàn bộ mã nguồn dự án vào container  
 COPY . .  
 
-# Expose cổng 3000 cho server ReactJS chạy  
+# Nếu bạn dùng TypeScript (vite.config.ts), đảm bảo TypeScript được cài đặt:  
+RUN npm install typescript --save-dev  
+
+# Expose cổng mà ứng dụng sẽ chạy  
 EXPOSE 3000  
 
-# Mở terminal và khởi chạy server phát triển bằng npm  
-CMD ["npm", "start"]
+# Khởi chạy ứng dụng Vite (dùng npm run dev)  
+CMD ["npm", "run", "dev"]

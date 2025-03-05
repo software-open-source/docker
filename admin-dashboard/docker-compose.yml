@@ -1,15 +1,15 @@
-version: '3.9'  
+version: "3.9"  
 
 services:  
   admin-dashboard:  
     build:  
-      context: .  
-      dockerfile: Dockerfile  
+      context: .              # Build từ Dockerfile tại thư mục hiện tại  
+      dockerfile: Dockerfile  # Đảm bảo sử dụng đúng Dockerfile  
     ports:  
-      - "80:3000" # Map cổng 3000 trên host -> cổng 3000 trong container  
+      - "80:3000"             # Map cổng 3000 trong container sang cổng 80 trên host  
     volumes:  
-      - .:/app       # Đồng bộ mã nguồn dự án bên ngoài vào container  
-      - /app/node_modules # Để tránh ghi đè thư mục node_modules  
-    stdin_open: true   # Giữ terminal open để phát triển linh hoạt  
-    tty: true          # Để React server không ngắt
-    restart: always
+      - .:/app                # Đồng bộ mã nguồn từ host vào container  
+      - /app/node_modules     # Tránh ghi đè node_modules  
+    stdin_open: true          # Giữ terminal mở để phát triển  
+    tty: true  
+    restart: always #unless-stopped   # Tự động restart nếu container bị crash
