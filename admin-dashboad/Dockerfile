@@ -1,33 +1,29 @@
-# Sử dụng hình ảnh node:18-alpine thay cho phiên bản mới nhất vì nó ổn định  
-FROM node:20-alpine  
+# Build stage  
+FROM node:20-alpine as build  
 
-# Thiết lập biến môi trường để giảm lỗi khi chạy ứng dụng  
-ENV NODE_ENV=development  
-ENV CHOKIDAR_USEPOLLING=true  
-
-# Cài đặt các công cụ build cần thiết để hỗ trợ esbuild và các công cụ Node.js  
-RUN apk add --no-cache build-base python3  
-
-# Thiết lập thư mục làm việc bên trong container  
 WORKDIR /app  
 
-# Sao chép các file cấu hình của dự án (package.json và package-lock.json hoặc yarn.lock) vào container  
+# Copy package files  
 COPY package*.json ./  
+RUN npm ci  
 
-# Cài đặt dependencies  
-RUN npm install  
-
-# Nếu bạn sử dụng yarn, thay thế bằng:  
-# RUN npm install -g yarn && yarn install  
-
-# Sao chép toàn bộ mã nguồn dự án vào container  
+# Copy source code  
 COPY . .  
 
-# Nếu bạn dùng TypeScript (vite.config.ts), đảm bảo TypeScript được cài đặt:  
-RUN npm install typescript --save-dev  
+# Build the app  
+RUN npm run build  
 
-# Expose cổng mà ứng dụng sẽ chạy  
-EXPOSE 3000  
+# Production stage  
+FROM nginx:alpine  
 
-# Khởi chạy ứng dụng Vite (dùng npm run dev)  
-CMD ["npm", "run", "dev"]
+# Copy built files from build stage  
+COPY --from=build /app/dist /usr/share/nginx/html  
+
+# Copy nginx configuration  
+COPY nginx.conf /etc/nginx/conf.d/default.conf  
+
+# Expose port 80  
+EXPOSE 80  
+
+# Start Nginx  
+CMD ["nginx", "-g", "daemon off;"]
