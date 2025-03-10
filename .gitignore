@@ -2,3 +2,4 @@ mariadb/data/
 postgres/postgres/
 owncloud/owncloud_data/
 redis/redis-data/
+mongo/mongo-data/
