@@ -3,7 +3,9 @@ import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig({build: {
+  outDir: '../nginx/html', // Đổi 'custom-folder' thành thư mục bạn muốn
+},
   plugins: [
     react(),
     svgr({
