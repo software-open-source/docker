@@ -1,0 +1,36 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Build Project",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["build"], // tương ứng với "yarn build"
+      "skipFiles": ["<node_internals>/**"],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch dev server",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["dev"], // tương ứng với "yarn dev"
+      "skipFiles": ["<node_internals>/**"],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/src"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Launch dev server + Chrome",
+      "configurations": ["Launch dev server", "Launch Chrome"]
+    }
+  ]
+}
