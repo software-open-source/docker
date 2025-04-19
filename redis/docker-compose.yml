@@ -6,7 +6,7 @@ services:
     container_name: redis-server  
     command: [  
       "redis-server",  
-      "--requirepass", "redis"  
+      "--requirepass", "redis"
     ]  
     ports:  
       - "6379:6379"  

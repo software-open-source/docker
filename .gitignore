@@ -5,3 +5,4 @@ redis/redis-data/
 mongo/mongo-data/
 nginx/html/
 tests/
+mssql/load-data/
