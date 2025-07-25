@@ -4,7 +4,7 @@ services:
   minio:
     image: minio/minio:latest
     container_name: minio
-    restart: unless-stopped
+    restart: always
     ports:
       - "8011:9000"      # MinIO API
       - "8012:9001"      # MinIO Console (Web UI)
@@ -32,6 +32,7 @@ services:
   minio-client:
     image: minio/mc:latest
     container_name: minio-client
+    restart: always
     depends_on:
       - minio
     entrypoint: >
