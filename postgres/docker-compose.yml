@@ -7,14 +7,17 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      PGDATA: /data/postgres
+      PGDATA: /var/lib/postgresql/data
+      TZ: UTC
     volumes:
-      - ./postgres:/data/postgres
+      - ./postgres/data:/var/lib/postgresql/data
+      - ./postgres/conf/postgresql.conf:/etc/postgresql/postgresql.conf
     ports:
       - "5432:5432"
     networks:
       - postgres
     restart: always
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
 
   # pgadmin:
   #   container_name: pgadmin_container
@@ -29,7 +32,6 @@ services:
   #   networks:
   #     - postgres
   #   restart: always
-  #   # unless-stopped
 
 networks:
   postgres:
